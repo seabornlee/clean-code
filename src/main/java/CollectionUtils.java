@@ -10,16 +10,30 @@ public class CollectionUtils {
      * @return
      */
     public static List<List<Object>> split(List<Object> list, int len) {
-        if (list == null || list.size() == 0 || len < 1) {
+        if (list == null || list.isEmpty() || len < 1) {
             return null;
         }
-        List<List<Object>> result = new ArrayList<>();
-        int size = list.size();
-        int count = (size + len - 1) / len;
-        for (int i = 0; i < count; i++) {
-            List<Object> subList = list.subList(i * len, ((i + 1) * len > size ? size : len * (i + 1)));
+
+        ArrayList<List<Object>> result = new ArrayList<>();
+        ArrayList<Object> subList = new ArrayList<>();
+
+        for (Object o : list) {
+            subList.add(o);
+
+            if (isSubListFull(len, subList)) {
+                result.add(subList);
+                subList = new ArrayList<>();
+            }
+        }
+
+        if (!subList.isEmpty()) {
             result.add(subList);
         }
+
         return result;
+    }
+
+    private static boolean isSubListFull(int len, ArrayList<Object> subList) {
+        return subList.size() == len;
     }
 }
